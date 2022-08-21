@@ -1,7 +1,7 @@
 prompt = '---------------------Data Orginal------------------------------'
-%datab = readtable("datos.xlsx")
+%datab = readtable("datos.xlsx")%ingresar datos desde un archivo
 %data = table2array(datab);
-data =  X;
+data =  X; %ingresar datos creados aleatoriamente
 prompt = 'New data: '
 n = input(prompt) %cuantos datos nuevos quiere generar
 %data = readtable('fileName.xlsx', 'Range', 'columna:columna'); si es un csv
@@ -32,7 +32,7 @@ FreqAbsN = zeros(class_Num,1);
 FreqAbsAN = zeros(class_Num,1);
 FreqAbsA = zeros(class_Num,1);
 FreqRelaA = zeros(class_Num,1);
-
+%creacion de frecuencia y nuevos datos
 for i = 1:class_Num
     FreqAbsN(i,1) = n*FreqRela(i,1);   
     
@@ -65,7 +65,7 @@ for i = 1:class_Num
         break
     end
 end
-
+%indicadores tabulados
 prompt = '---------Indicadores------------'
 media = (MarcaClase'*FreqAbs)/datTotal;
 aux = (MarcaClase' - media).^2;
@@ -86,7 +86,7 @@ mediana_nuevos = TABLA.MarcaClase(positionN);
 [B,TF] = rmoutliers(data,'mean');
 Dato_raro = data(TF)
 media_acortada = mean(B)
-%%%%Indicadores crudos
+%%%%Indicadores crudos nuevos
 media_crudosN = mean(datN);
 mediana_crudosN = median(datN);
 moda_crudosN = floor(mode(datN));
@@ -100,7 +100,7 @@ moda_crudos = mode(data);
 varianza_crudos = var(data);
 desv_crudos = std(data);
 mediana_sim = median(x);
-
+%Creacion de cuantiles
 prompt = '-----------Cuantiles-------------'
 crudos = quantile(data,[0.25 , 0.5, 0.75 ,0.975]);
 q1 = datTotal*0.25;
@@ -174,8 +174,9 @@ Simulados
 Nuevos = quantile(datN,[0.25 , 0.5, 0.75 ,0.975]);
 Cuantiles = table(crudos, tabla, Nuevos)
 
-
+%plots
 prompt = '-----------Bar plots------------------'
+%comapracion datos nuevos y originales
 tu = histogram(data ,class_Num);
 xlabel('Marca de clase')
 ylabel('Frecuencia')
@@ -185,6 +186,7 @@ xlabel('Marca de clase')
 ylabel('Frecuencia Nuevos')
 tu.Normalization = 'probability';
 e.Normalization = 'probability';
+%boxplot con y sin media acortada
 figure
 boxplot(data, 'Orientation', 'Horizontal')
 xlabel('Marca de clase')
@@ -194,6 +196,7 @@ boxplot(B, 'Orientation', 'Horizontal')
 xlabel('Marca de clase')
 ylabel('Frecuencia plot sin ourlyers')
 figure
+%grafica comparacion de frecuencias absolutas
 subplot(3,1,1)
 hist(data,class_Num)
 title('Datos Crudos')
@@ -207,8 +210,6 @@ title('Datos Simulados')
 
 % title('Datos Simulados')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%datos nuevos total = datN
-%data = data orginal
-%datN;
-%A = datN;
-%[B,TF] = rmoutliers(A,'mean');
+%datos nuevos total = length(datN)
+%data; data orginal
+%datN; datos nuevos
