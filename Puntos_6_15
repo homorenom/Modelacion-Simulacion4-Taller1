@@ -1,0 +1,114 @@
+% Taller 1 - Punto 15: datos atipicos en data5 y data12
+data5(:,1)=[] % le quito la col 1
+x=[data(:,2) data(:,3)] % Tomo las columnas 2 y 3
+d=mahal(x,x) % distancia Mahalanovich (cada reg en x al centro)
+hist(d)
+pc=prctile(d,90)
+i=find(d >= pc) % Outlieres
+plot(x(:,1),x(:,2),'o') 
+hold on
+plot(x(i,1),x(i,2),'or')
+% Lo hacemos ahora para las 5 variables del archivo
+d=mahal(data5,data5)
+hist(d)
+pc=prctile(d,90)
+i=find(d >= pc) % Outlieres
+plot(data5(:,1),data5(:,5),'o') % Como estoy en dim 5, hago proy a 2 dim.
+hold on
+plot(data5(i,1),data5(i,5),'or')
+% Análisis sobre Data 12
+data12(:,1)=[] % le quito la col 1
+x12_2=[data12(:,4) data(:,5)] % Tomo las columnas 4 (Energia) y 5 (Quimica)
+d12=mahal(x12_2,x12_2) % distancia Mahalanovich (cada reg en x al centro)
+hist(d12)
+pc12=prctile(d12,90)
+i12=find(d12 >= pc12)
+plot(x12_2(:,1),x12_2(:,2),'o') 
+hold on
+plot(x12_2(i12,1),x12_2(i12,2),'or')
+% Analisis sobre las 12 variables
+d12=mahal(data12,data12)
+hist(d12)
+pc12=prctile(d12,90)
+i12=find(d12 >= pc12) % Outlieres
+plot(data12(:,1),data12(:,12),'o') % Como estoy en dim 12, hago proy a 2 dim.
+hold on
+plot(data12(i12,1),data12(i12,12),'or')
+% Punto 6 con datos Helath de data12 - Var mejor explicada
+data12(:,1)=[] % le quito la col 1
+C12=cov(data12) % Matriz de covarianza
+[vector12 valor12]=eig(C12) % Vectores propios de la matriz de covarianza
+% El dominante (353.29) es el 12
+Pr12=data12*vector12(:,end) % Los recuesto sobre el vector dominante (el último)
+valor12=diag(valor12) % Convierto la diagonal en un vector
+Pv12=valor12/sum(valor12) % Calculo el porcentaje explicado por cada una de las 12 variables.
+%%%%%%%%%%%%%%%%
+% Punto 6 usando medifis - Procedimiento de Peña
+Cmd=cov(medifis)
+medifis7=medifis(:,[2 3 4 5 6 7 8]) % Tomo las variables físicas (no el sexo)
+Cmd7=cov(medifis7) % Calculo la matriz de covarianzas (S)
+Rmd7=corrcov(Cmd7) % Calculo la matriz de correlación
+Invmd7=inv(Cmd7) % Inversa de la matriz de Covarianzas (S -1)
+diagCmd7=diag(Cmd7) % Diagonal de S
+diagInvmd7=diag(Invmd7) % Diagonal de S -1
+v=[0
+    0
+    0
+    0
+    0
+    0
+    0]
+for j=1:7 
+    v(j)=diagCmd7(j,1)*diagInvmd7(j,1) %Producto de Diagonales
+end
+for j=1:7
+    vinv(j)=1/v(j) % Inversos de v
+end
+for j=1:7
+    corr(j)=1-vinv(j) % Coeficientes de Correlación % Estatura = 0.9304
+end
+% Con el procedimiento de Henry, para medefis
+    
+[vecmed valmed]=eig(Cmd7)
+Prmd=medifis7*vecmed(:,end)
+valmed=diag(valmed)
+Pvmed=valmed/sum(valmed)
+% Matriz de correlación
+Rmd=corrcov(Cmd7)
+
+
+
+% Peña para data12
+
+Cdata12=cov(data12)
+Rmd12=corrcov(Cdata12)
+Invdata12=inv(Cdata12) % Inversa de la matriz de Covarianzas (S -1)
+diagCdata12=diag(Cdata12) % Diagonal de S
+diagInvdata12=diag(Invdata12) % Diagonal de S -1
+for j=1:12 
+    vd12(j)=diagCdata12(j,1)*diagInvdata12(j,1) %Producto de Diagonales
+end
+for j=1:12
+    vinvdata12(j)=1/vd12(j) % Inversos de v
+end
+for j=1:12
+    corrd12(j)=1-vinvdata12(j) % Coeficientes de Correlación % Estatura = 0.9304
+end
+
+% Para data10
+
+data10(:,1)=[] % le quito la col 1
+Cdata10=cov(data10)
+Rmd10=corrcov(Cdata10)
+Invdata10=inv(Cdata10) % Inversa de la matriz de Covarianzas (S -1)
+diagCdata10=diag(Cdata10) % Diagonal de S
+diagInvdata10=diag(Invdata10) % Diagonal de S -1
+for j=1:10 
+    vd10(j)=diagCdata10(j,1)*diagInvdata10(j,1) %Producto de Diagonales
+end
+for j=1:10
+    vinvdata10(j)=1/vd10(j) % Inversos de v
+end
+for j=1:10
+    corrd10(j)=1-vinvdata10(j) % Coeficientes de Correlación % Estatura = 0.9304
+end
